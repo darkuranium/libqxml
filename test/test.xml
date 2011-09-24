@@ -1,0 +1,17 @@
+<!-- comment! -->
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog name="&quot;foo &amp; bar&quot;" small>
+    <!-- another comment -->
+    Some test text!
+    <![CDATA[<cdata>This is cdata!</cdata>]]>
+    <empty hello='world!'/>
+    <book id="bk101">
+        <author>Gambardella &amp; Matthew</author>
+        <title>XML Developer's Guide</title>
+        <genre>Computer</genre>
+        <price>44.95</price>
+        <publish_date>2000-10-01</publish_date>
+        <description>An in-depth look at creating applications
+        with XML.</description>
+    </book>
+</catalog>
