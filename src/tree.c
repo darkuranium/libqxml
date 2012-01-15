@@ -87,7 +87,7 @@ static void addAttrib(QXML_File* xml, QXML_Node* node, const char* key, size_t k
         node->attribvals[node->numattrib - 1] = malloc(ulen + 1);
         if(!node->attribvals[node->numattrib - 1]) goto error;
         qxml_string_unescapelen(node->attribvals[node->numattrib - 1], ulen + 1, val, vlen);
-        node->attribvals[node->numattrib - 1][vlen] = 0;
+        node->attribvals[node->numattrib - 1][ulen] = 0;
     }
     else
         node->attribvals[node->numattrib - 1] = NULL;
@@ -396,36 +396,35 @@ QXML_Node* qxml_node_insert_after(QXML_Node* prev, QXML_NodeType type, const cha
 }
 void qxml_node_remove(QXML_Node* node)
 {
-    size_t i;
-
-    if(node)
+    if(!node)
+        return;
+    
+    if(node->prev)
+        node->prev->next = node->next;
+    if(node->next)
+        node->next->prev = node->prev;
+    if(node->parent)
     {
-        if(node->prev)
-            node->prev->next = node->next;
-        if(node->next)
-            node->next->prev = node->prev;
-        if(node->parent)
-        {
-            if(node->parent->fchild == node)
-                node->parent->fchild = node->prev;
-            if(node->parent->lchild == node)
-                node->parent->lchild = node->next;
-        }
-
-        free(node->str);
-
-        for(i = 0; i < node->numattrib; i++)
-        {
-            free(node->attribkeys[i]);
-            if(node->attribvals[i])
-                free(node->attribvals[i]);
-        }
-        free(node->attribkeys);
-        free(node->attribvals);
-
-        free(node);
-
-        while(node->fchild)
-            qxml_node_remove(node->fchild);
+        if(node->parent->fchild == node)
+            node->parent->fchild = node->next;
+        if(node->parent->lchild == node)
+            node->parent->lchild = node->prev;
     }
+
+    free(node->str);
+
+    size_t i;
+    for(i = 0; i < node->numattrib; i++)
+    {
+        free(node->attribkeys[i]);
+        if(node->attribvals[i])
+            free(node->attribvals[i]);
+    }
+    free(node->attribkeys);
+    free(node->attribvals);
+    
+    while(node->fchild)
+        qxml_node_remove(node->fchild);
+    
+    free(node);
 }
