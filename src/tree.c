@@ -396,6 +396,8 @@ QXML_Node* qxml_node_insert_after(QXML_Node* prev, QXML_NodeType type, const cha
 }
 void qxml_node_remove(QXML_Node* node)
 {
+	size_t i;
+
     if(!node)
         return;
     
@@ -413,7 +415,6 @@ void qxml_node_remove(QXML_Node* node)
 
     free(node->str);
 
-    size_t i;
     for(i = 0; i < node->numattrib; i++)
     {
         free(node->attribkeys[i]);
