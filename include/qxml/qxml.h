@@ -17,6 +17,7 @@
 /* +whitespace */
 
 #include "file.h"
+#include "stream.h"
 #include "string.h"
 #include "tree.h"
 

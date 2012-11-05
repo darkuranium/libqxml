@@ -53,8 +53,8 @@ int main()
     char utestt[256];
     QXML_Node* node;
     QXML_File* xml;
-    
-    xml = qxml_file_create("test.xml");
+
+    xml = qxml_file_create_fname("test.xml");
     if(!xml)
     {
         fprintf(stderr, "Error: Cannot open file \"test.xml\"\n");
@@ -73,6 +73,8 @@ int main()
     ret = !qxml_file_process(xml);
 
     printf("----------\n");
+
+    qxml_file_rewind(xml);
 
     node = qxml_tree_create(xml);
 
