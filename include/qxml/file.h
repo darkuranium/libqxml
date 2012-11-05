@@ -1,7 +1,7 @@
 #ifndef __QXML_FILE_H__
 #define __QXML_FILE_H__
 
-#include <stddef.h>
+#include "stream.h"
 
 struct QXML_File;
 
@@ -17,8 +17,9 @@ typedef void (QXML_CB_Error)(struct QXML_File* xml, size_t offset, size_t line, 
 
 typedef struct QXML_File
 {
-    size_t len;
-    char* text;
+    QXML_Stream* stream;
+    int delstream;
+
     void* data;
     int stop;
 
@@ -34,13 +35,19 @@ typedef struct QXML_File
     QXML_CB_Error* cb_error;
 } QXML_File;
 
-
-QXML_File* qxml_file_create_textlen(const char* text, size_t len);
-QXML_File* qxml_file_create_text(const char* text);
-QXML_File* qxml_file_create(const char* fname);
+QXML_File* qxml_file_create(QXML_Stream* stream, int del);
+QXML_File* qxml_file_create_fd(int fd, int close);
+QXML_File* qxml_file_create_file(FILE* file, int close);
+QXML_File* qxml_file_create_fname(const char* fname);
+QXML_File* qxml_file_create_strlen(const char* str, size_t len, int copy);
+QXML_File* qxml_file_create_str(const char* str, int copy);
 
 void qxml_file_destroy(QXML_File* xml);
+void qxml_file_rewind(QXML_File* xml);
 void qxml_file_stop(QXML_File* xml);
+
+void qxml_file_set_data(QXML_File* xml, void* data);
+void* qxml_file_get_data(QXML_File* xml);
 
 int qxml_file_process(QXML_File* xml);
 

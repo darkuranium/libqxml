@@ -1,10 +1,13 @@
 #include <qxml/string.h>
-#include <qxml/internal.h>
 
 #include <string.h>
 
 #define QXML_MIN(x, y) (((x) < (y)) ? (x) : (y))
 
+static int _qxml_string_startswith(const char* input, const char* what)
+{
+    return !strncmp(input, what, strlen(what));
+}
 static void _qxml_string_appendlen(size_t* num, char* out, size_t olen, const char* str, size_t len)
 {
     *num += len;
